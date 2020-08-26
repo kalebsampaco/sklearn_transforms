@@ -14,3 +14,46 @@ class DropColumns(BaseEstimator, TransformerMixin):
         data = X.copy()
         # Retornamos um novo dataframe sem as colunas indesejadas
         return data.drop(labels=self.columns, axis='columns')
+
+def norm(df):
+
+    #Quito los datos que no se van a normalizar
+    part1 = df.iloc[:,[0]]
+    part2 = df.iloc[:,[13]]
+
+    # selecciono los datos a normalizar y uso la clase de normalizacion de sklearn
+    transformer = Normalizer().fit_transform(df.iloc[:,1:13]) 
+    transformer
+
+    # Concatenación de los datos
+    df_data_conc1 = np.concatenate([part1, transformer, part2], axis=1)
+
+    #Datos ya normalizados
+    df_data_3 = pd.DataFrame(df_data_conc1, columns = ['USER_ID', 'HOURS_DATASCIENCE', 'HOURS_BACKEND', 'HOURS_FRONTEND',
+           'NUM_COURSES_BEGINNER_DATASCIENCE', 'NUM_COURSES_BEGINNER_BACKEND',
+           'NUM_COURSES_BEGINNER_FRONTEND', 'NUM_COURSES_ADVANCED_DATASCIENCE',
+           'NUM_COURSES_ADVANCED_BACKEND', 'NUM_COURSES_ADVANCED_FRONTEND',
+           'AVG_SCORE_DATASCIENCE', 'AVG_SCORE_BACKEND', 'AVG_SCORE_FRONTEND',
+           'PROFILE'])
+
+    return df_data_3
+    
+def transform_df(df):
+    # Llenado los nan por ceros en la sección indicada
+    df1 = si_cero.fit_transform(X=df.iloc[:, 0:10])
+    # Llenando los nan por la media en la sección indicada
+    df2 = si_mean.fit_transform(X=df.iloc[:, 10:14])
+    #Concatenación de las dos secciones transformadas
+    df_data_conc = np.concatenate([df1, df2], axis=1)
+    df_data_conc
+
+    df_data_3 = pd.DataFrame(df_data_conc, columns = ['USER_ID', 'HOURS_DATASCIENCE', 'HOURS_BACKEND', 'HOURS_FRONTEND',
+           'NUM_COURSES_BEGINNER_DATASCIENCE', 'NUM_COURSES_BEGINNER_BACKEND',
+           'NUM_COURSES_BEGINNER_FRONTEND', 'NUM_COURSES_ADVANCED_DATASCIENCE',
+           'NUM_COURSES_ADVANCED_BACKEND', 'NUM_COURSES_ADVANCED_FRONTEND',
+           'AVG_SCORE_DATASCIENCE', 'AVG_SCORE_BACKEND', 'AVG_SCORE_FRONTEND',
+           'PROFILE'])
+
+    df_data_3 = norm(df_data_3)
+    
+    return df_data_3
