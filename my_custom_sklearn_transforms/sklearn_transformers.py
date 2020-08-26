@@ -16,7 +16,8 @@ class DropColumns(BaseEstimator, TransformerMixin):
         return data.drop(labels=self.columns, axis='columns')
 
 def norm(df):
-
+    from sklearn.preprocessing import Normalizer
+    from sklearn.preprocessing import normalize
     #Quito los datos que no se van a normalizar
     part1 = df.iloc[:,[0]]
     part2 = df.iloc[:,[13]]
@@ -39,6 +40,17 @@ def norm(df):
     return df_data_3
     
 def transform_df(df):
+    # Crear un objeto ``SimpleImputer`` para llenar con ceros
+    si_cero = SimpleImputer(
+        missing_values=np.nan,  # los valores que faltan son del tipo ``np.nan`` (Pandas estándar)
+        strategy='constant',  # la estrategia elegida es cambiar el valor faltante por una constante
+        fill_value=0,  # la constante que se usará para completar los valores faltantes es un int64 = 0
+        verbose=0,
+        copy=True
+    )
+    # Crear un objeto ``SimpleImputer`` para llenar con el promedio
+    si_mean = SimpleImputer(strategy='most_frequent', copy=True)
+    
     # Llenado los nan por ceros en la sección indicada
     df1 = si_cero.fit_transform(X=df.iloc[:, 0:10])
     # Llenando los nan por la media en la sección indicada
