@@ -40,6 +40,7 @@ def norm(df):
     return df_data_3
     
 def transform_df(df):
+    from sklearn.impute import SimpleImputer
     # Crear un objeto ``SimpleImputer`` para llenar con ceros
     si_cero = SimpleImputer(
         missing_values=np.nan,  # los valores que faltan son del tipo ``np.nan`` (Pandas estándar)
